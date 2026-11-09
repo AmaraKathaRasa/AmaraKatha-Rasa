@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amara Katha Rasa</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>if(CSS.supports('animation-timeline','view()')&&CSS.supports('animation-timeline','scroll()'))document.documentElement.classList.add('nat')</script>
+<style>
+/* ===== LUXURY CINEMATIC PALETTE ===== */
+:root{
+  --black:#0c0a09;
+  --ink:#0c0a09;
+  --cream:#f7f3eb;
+  --ivory:#f0ebe3;
+  --gold:#c9a86c;
+  --gold-lt:#e2c99a;
+  --cocoa:#2a1a12;
+  --spice:#8b4a32;
+  --forest:#1a2e24;
+  --royal:#1e2a4a;
+  --acc:var(--gold);
+  --cloud:28,22,18;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto;overscroll-behavior-y:none}
+html.lock{overflow:hidden}
+body{font-family:var(--sans);font-weight:300;color:var(--ink);background:var(--black);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+em{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:-.01em}
+.lab{font-size:.65rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.big{font-family:var(--sans);font-weight:500;text-transform:uppercase;letter-spacing:-.04em;line-height:.9}
+
+#bar{position:fixed;top:0;left:0;height:1.5px;width:100%;background:linear-gradient(90deg,var(--gold),var(--gold-lt));transform:scaleX(0);transform-origin:left;z-index:120;opacity:.9}
+
+/* refined viewfinder – thinner, further from edges */
+.corners{position:fixed;inset:22px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;opacity:.5}
+.corners i{position:absolute;width:18px;height:18px;border:0 solid currentColor}
+.corners i:nth-child(1){top:0;left:0;border-width:1px 0 0 1px}
+.corners i:nth-child(2){top:0;right:0;border-width:1px 1px 0 0}
+.corners i:nth-child(3){bottom:0;left:0;border-width:0 0 1px 1px}
+.corners i:nth-child(4){bottom:0;right:0;border-width:0 1px 1px 0}
+@media(max-width:700px){.corners{inset:14px;opacity:.35}.corners i{width:12px;height:12px}}
+
+/* ===== OPENING ===== */
+#intro{position:fixed;inset:0;background:var(--black);color:var(--cream);z-index:100;display:flex;align-items:center;justify-content:center;
+  transition:clip-path 1.4s var(--ease),visibility 1.4s;clip-path:inset(0 0 0 0)}
+#intro span{font-weight:500;font-size:clamp(1.1rem,2.8vw,1.8rem);letter-spacing:.45em;text-transform:uppercase;animation:fade 1.8s ease both}
+#intro.gone{clip-path:inset(0 0 100% 0);visibility:hidden}
+@keyframes fade{from{opacity:0;letter-spacing:.85em}to{opacity:1}}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:28px 5.5vw;color:#fff;mix-blend-mode:difference}
+nav .logo{font-weight:600;font-size:.85rem;letter-spacing:.18em;text-transform:uppercase}
+nav ul{display:flex;gap:36px;list-style:none;font-size:.64rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase}
+nav ul a{position:relative}
+nav ul a::after{content:"";position:absolute;left:0;bottom:-5px;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .55s var(--ease)}
+nav ul a:hover::after{transform:scaleX(1);transform-origin:left}
+@media(max-width:700px){nav{padding:18px 5vw}nav ul{gap:14px;font-size:.52rem;letter-spacing:.12em}nav .logo{font-size:.7rem}}
+
+.btn{display:inline-block;border:1px solid currentColor;padding:14px 32px;font-size:.64rem;font-weight:500;letter-spacing:.26em;text-transform:uppercase;
+  background:none;color:inherit;cursor:pointer;font-family:var(--sans);transition:background .4s,color .4s,transform .35s,border-color .4s}
+.btn:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity 1.15s ease,transform 1.15s var(--ease);transition-delay:var(--d,0s)}
+.reveal.show{opacity:1;transform:none}
+.mask{display:block;overflow:hidden;padding:.04em 0 .12em}
+.mask>span{display:inline-block;transform:translateY(110%);transition:transform 1.45s var(--ease)}
+.mask.show>span,.in .mask>span{transform:none}
+
+/* ===== HERO ===== */
+.hero{position:sticky;top:0;z-index:1;height:100vh;height:100svh;min-height:560px;color:#fff;display:flex;align-items:flex-end;overflow:hidden;
+  background:linear-gradient(165deg,#2a221c,#1a1512);transform-origin:50% 100%}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(var(--cloud),.45),rgba(var(--cloud),0) 28%,rgba(var(--cloud),0) 42%,rgba(var(--cloud),.62) 100%)}
+.clouds{position:absolute;left:0;right:0;bottom:0;height:62%;z-index:2;pointer-events:none;overflow:hidden}
+.clouds i{position:absolute;border-radius:50%;background:rgba(var(--cloud),.65);filter:blur(60px);will-change:transform;animation:drift 20s ease-in-out infinite alternate}
+.clouds i:nth-child(1){width:54vw;height:38vh;left:-16vw;bottom:-12vh}
+.clouds i:nth-child(2){width:48vw;height:42vh;left:20vw;bottom:-16vh;animation-duration:26s;animation-delay:-7s}
+.clouds i:nth-child(3){width:50vw;height:36vh;right:-16vw;bottom:-10vh;animation-duration:22s;animation-delay:-12s}
+.clouds i:nth-child(4){width:38vw;height:24vh;left:6vw;bottom:12vh;animation-duration:28s;animation-delay:-4s;background:rgba(var(--cloud),.45)}
+.clouds i:nth-child(5){width:36vw;height:22vh;right:8vw;bottom:14vh;animation-duration:25s;animation-delay:-10s;background:rgba(var(--cloud),.4)}
+.clouds i:nth-child(6){width:44vw;height:15vh;left:28vw;bottom:26vh;animation-duration:30s;animation-delay:-15s;background:rgba(255,255,255,.12)}
+@keyframes drift{from{transform:translate3d(-4vw,0,0) scale(1)}to{transform:translate3d(5vw,-2.5vh,0) scale(1.1)}}
+.shade{position:absolute;inset:0;background:#000;opacity:0;z-index:4;pointer-events:none}
+.hero .content{position:relative;z-index:3;width:100%;padding:0 5.5vw 7vh;text-shadow:0 6px 48px rgba(0,0,0,.5)}
+.hero .kick{display:block;margin-bottom:2.2vh;color:var(--gold-lt)}
+.hero h1{font-family:var(--sans);font-weight:500;text-transform:uppercase;font-size:clamp(2.5rem,9.2vw,8.8rem);line-height:.9;letter-spacing:-.045em}
+.ln{display:block;overflow:hidden;padding:.02em 0 .06em}
+.ln>span{display:inline-block;transform:translateY(108%);transition:transform 1.7s var(--ease)}
+.l2>span{transition-delay:.16s}
+.hero.in .ln>span{transform:none}
+.hero h1 em{color:var(--gold-lt);font-size:.78em;margin-left:.05em}
+.hero .meta{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-top:3.6vh;padding-top:2.6vh;border-top:1px solid rgba(255,255,255,.22)}
+.hero .meta p{max-width:380px;color:rgba(255,255,255,.88);font-size:.92rem;font-weight:300}
+.hero .btn:hover{background:#fff;color:var(--ink);border-color:#fff}
+.scrollcue{position:absolute;right:5.5vw;top:48%;z-index:3;font-size:.58rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.7);writing-mode:vertical-rl;display:flex;align-items:center;gap:16px}
+.scrollcue i{display:block;width:1px;height:56px;background:rgba(255,255,255,.7);transform-origin:top;animation:cue 2.2s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0)}55%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.hero.off .clouds i,.hero.off .scrollcue i{animation-play-state:paused}
+@media(max-width:700px){.hero h1{font-size:13.8vw}.hero .content{padding-bottom:5.5svh}.hero .meta{flex-direction:column;align-items:flex-start;gap:18px;margin-top:2.6svh}.scrollcue{display:none}}
+
+/* ===== CHOCOLATES ===== */
+.choc{position:relative;z-index:2;background:var(--black)}
+.hs{position:relative}
+.pin{--top:calc(6.8svh + 48px + 1.2svh);--S:min(45svh,68vw);position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#0c0a09}
+.dark{--fg:#f7f3eb;--mute:rgba(247,243,235,.68);--acc:var(--gold-lt)}
+
+/* a coloured scene for each chocolate, with fine gold line-art of what its name means */
+.scenes{position:absolute;inset:0;z-index:0}
+.scene{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+.scene.on{opacity:1}
+.scene::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 52%,rgba(0,0,0,.4) 100%);pointer-events:none}
+.s0{background:radial-gradient(ellipse 75% 65% at 50% 46%,#6a1d30 0%,#45121f 55%,#240812 100%)}   /* Itihaas · royal burgundy */
+.s1{background:radial-gradient(ellipse 75% 65% at 50% 46%,#a5532c 0%,#74361e 55%,#3d1a0d 100%)}   /* Masala Mood · spice */
+.s2{background:radial-gradient(ellipse 75% 65% at 50% 46%,#2b5a40 0%,#173626 55%,#0a1a12 100%)}   /* Vanvas · forest */
+.s3{background:radial-gradient(ellipse 75% 65% at 50% 46%,#34478f 0%,#1f2c61 55%,#0e1433 100%)}   /* Kahani · midnight indigo */
+.s0::before{content:"";position:absolute;inset:0;opacity:.55;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72' fill='none' stroke='%23e2c99a' stroke-width='.7'%3E%3Cpath d='M36 0L72 36L36 72L0 36Z'/%3E%3Ccircle cx='36' cy='36' r='7'/%3E%3Cpath d='M36 28Q44 36 36 44Q28 36 36 28Z'/%3E%3C/svg%3E");
+  -webkit-mask-image:radial-gradient(ellipse at 50% 50%,transparent 26%,#000 78%);mask-image:radial-gradient(ellipse at 50% 50%,transparent 26%,#000 78%)}
+.art{position:absolute;inset:0;opacity:.4;will-change:transform;animation:artdrift 28s ease-in-out infinite alternate}
+.art svg{width:100%;height:100%;display:block}
+.art svg *{fill:none;stroke:var(--gold-lt);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+@keyframes artdrift{from{transform:translate3d(0,-8px,0) scale(1.02)}to{transform:translate3d(0,8px,0) scale(1.05)}}
+
+/* names stand beside the cube, set vertically */
+.heads{position:absolute;inset:0;z-index:3;pointer-events:none}
+.name{--fs:min(calc(76svh/(var(--len)*.6)),13.5vw,19svh);position:absolute;top:0;bottom:0;margin:auto 0;height:max-content;writing-mode:vertical-rl;white-space:nowrap;overflow:hidden;padding:0 .06em;color:var(--fg);
+  font-family:var(--sans);font-weight:500;text-transform:uppercase;font-size:var(--fs);line-height:1;letter-spacing:-.02em;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s}
+.name.l{left:5vw;rotate:180deg}
+.name.r{right:5vw}
+.name.on{opacity:1;visibility:visible}
+.ch{display:inline-block;transform:translate3d(115%,0,0);opacity:0;transition:transform .5s cubic-bezier(.55,0,.75,.4),opacity .3s ease}
+.name.on .ch{transform:translate3d(0,0,0);opacity:1;transition:transform 1.1s var(--ease) calc(var(--n)*38ms + .45s),opacity .6s ease calc(var(--n)*38ms + .45s)}
+
+/* cube: it turns by a fixed amount for each chocolate, always at the same speed */
+.stage{position:absolute;left:50%;top:var(--top);width:var(--S);height:var(--S);margin-left:calc(var(--S)/-2);perspective:1800px;z-index:2}
+.tilt{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--S)/-2)) rotateX(-8deg)}
+.cube{position:absolute;inset:0;transform-style:preserve-3d;rotate:0 1 0 calc(var(--k,0)*-90deg);transition:rotate 1.5s cubic-bezier(.65,0,.2,1)}
+.cube.dip{animation:dip 1.5s cubic-bezier(.65,0,.2,1)}
+@keyframes dip{50%{scale:.9}}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;background:#1a1512;
+  transform:rotateY(calc(var(--r)*90deg)) translateZ(calc(var(--S)/2));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.face video{width:100%;height:100%;object-fit:cover;display:block}
+.face::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(0,0,0,.25);pointer-events:none}
+.floor{position:absolute;left:50%;top:calc(100% + 2.8svh);width:85%;height:2.8svh;margin-left:-42.5%;background:radial-gradient(closest-side,rgba(0,0,0,.4),transparent);opacity:.8}
+
+/* words under the cube */
+.tails{position:absolute;left:0;right:0;top:calc(var(--top) + var(--S) + 6svh);z-index:3}
+.info{position:absolute;left:50%;top:0;width:min(480px,86vw);transform:translate3d(-50%,28px,0);display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;color:var(--fg);
+  opacity:0;pointer-events:none;transition:opacity .5s ease,transform .55s ease}
+.info.on{opacity:1;pointer-events:auto;transform:translate3d(-50%,0,0);transition:opacity 1s ease .5s,transform 1.1s var(--ease) .5s}
+.info.past{transform:translate3d(-50%,-22px,0);opacity:0}
+.info .cnt{color:var(--acc);font-size:.6rem}
+.tag{font-family:var(--serif);font-weight:400;font-size:clamp(1.65rem,2.5vw,2.25rem);line-height:1.05;letter-spacing:-.015em}
+.tag em{color:var(--acc)}
+.desc{color:var(--mute);font-size:.88rem;line-height:1.6;max-width:420px}
+.tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:2px}
+.tags span{font-size:.54rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:5px 12px;opacity:.8}
+.enq{margin-top:6px;border-radius:999px;background:var(--fg);color:#0c0a09;padding:13px 26px;font-size:.6rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;transition:transform .5s var(--ease),background .35s}
+.enq:hover{background:var(--acc);transform:translateY(-3px)}
+
+/* soft haze at every change */
+.smoke{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden;opacity:0}
+.smoke.puff{animation:puff 2s ease both}
+@keyframes puff{0%{opacity:0}30%{opacity:.6}100%{opacity:0}}
+.smoke i{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform;animation:drift 16s ease-in-out infinite alternate}
+.smoke i:nth-child(1){left:-12vw;top:18svh;width:55vw;height:42svh;background:rgba(247,243,235,.4)}
+.smoke i:nth-child(2){right:-14vw;top:35svh;width:50vw;height:48svh;background:rgba(201,168,108,.35);animation-duration:20s;animation-delay:-6s}
+.smoke i:nth-child(3){left:22vw;bottom:-12svh;width:55vw;height:38svh;background:rgba(247,243,235,.3);animation-duration:23s;animation-delay:-10s}
+.smoke i:nth-child(4){left:6vw;top:-10svh;width:42vw;height:32svh;background:rgba(201,168,108,.3);animation-duration:18s;animation-delay:-4s}
+.smoke i:nth-child(5){right:10vw;bottom:2vh;width:38vw;height:28svh;background:rgba(247,243,235,.3);animation-duration:25s;animation-delay:-13s}
+
+/* bottom controls */
+.ui{position:absolute;left:5.5vw;right:5.5vw;bottom:max(28px,env(safe-area-inset-bottom));z-index:6;display:flex;justify-content:space-between;align-items:center;color:#f7f3eb;pointer-events:auto}
+.ui button{background:none;border:none;color:inherit;cursor:pointer;font-family:var(--sans)}
+.arrows{display:flex;gap:12px}
+.arrows button{width:46px;height:46px;border-radius:50%;border:1px solid currentColor;font-size:1.05rem;display:flex;align-items:center;justify-content:center;transition:background .4s,color .4s,border-color .4s,transform .3s}
+.arrows button:hover{background:var(--gold);border-color:var(--gold);color:#0c0a09;transform:scale(1.06)}
+.index{display:flex;gap:clamp(18px,3.2vw,42px)}
+.index button{font-size:.62rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;opacity:.4;position:relative;padding-bottom:6px;transition:opacity .5s}
+.index button::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .75s var(--ease)}
+.index button.on{opacity:1}.index button.on::after{transform:scaleX(1)}
+@media(max-height:780px){.tags{display:none}}
+@media(max-height:640px){.desc{display:none}}
+@media(max-width:800px){
+  .pin{--top:calc(7svh + 40px);--S:min(44svh,66vw)}
+  .ui{display:none}.desc{font-size:.82rem}
+  .name{--fs:min(calc(var(--S)/(var(--len)*.6)),9vw);top:var(--top);bottom:auto;margin:0}
+  .name.l{left:3vw}.name.r{right:3vw}
+  .tags{display:none}
+}
+
+/* ===== CONTACT ===== */
+.contact{position:relative;z-index:3;margin-top:-100vh;margin-top:-100svh;min-height:100vh;min-height:100svh;background:var(--black);color:var(--cream);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.contact .wrap{padding:15vh 5.5vw 5vh}
+.contact .lab{color:var(--gold)}
+.contact h2{font-size:clamp(2.7rem,9.5vw,8.5rem);margin:2.6vh 0 5.5vh}
+.contact h2 em{color:var(--gold-lt);font-size:.8em}
+.cols{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:42px;border-top:1px solid rgba(255,255,255,.15);padding-top:30px}
+.cols .lab{display:block;margin-bottom:11px;color:rgba(247,243,235,.55)}
+.cols p{color:rgba(247,243,235,.65);font-size:.92rem}
+.mail{font-size:clamp(1.1rem,2.2vw,1.75rem);font-weight:400;letter-spacing:-.02em;border-bottom:1px solid var(--gold);padding-bottom:4px;word-break:break-all;transition:color .3s}
+.mail:hover{color:var(--gold-lt)}
+.actions{display:flex;gap:32px;align-items:center;margin-top:5.5vh;flex-wrap:wrap}
+.up{font-size:.64rem;font-weight:500;letter-spacing:.26em;text-transform:uppercase;opacity:.6;transition:opacity .3s}.up:hover{opacity:1}
+.end{background:linear-gradient(180deg,var(--cocoa),#1a1210);margin-top:6vh}
+.word{padding:5.5vh 5.5vw 1.2vh;font-size:clamp(1.9rem,9vw,9.5rem);white-space:nowrap;color:var(--cream)}
+.word em{color:var(--gold-lt);font-size:.8em}
+footer{padding:24px 5.5vw;font-size:.6rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:rgba(247,243,235,.55);border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media(max-width:800px){.contact .wrap{padding-top:13svh}.cols{grid-template-columns:1fr;gap:24px}.actions{margin-top:4.5svh}.word{padding-top:4.5svh}}
+
+/* ===== STORY ===== */
+#story{position:fixed;inset:0;z-index:95;background:var(--cocoa);color:var(--cream);display:flex;align-items:center;padding:9vh 5.5vw;
+  clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path 1.15s var(--ease),visibility 1.15s}
+#story.open{clip-path:inset(0 0 0 0);visibility:visible}
+#story .lab{color:var(--gold-lt)}
+#story h2{font-size:clamp(2.5rem,8.5vw,7.5rem);margin:3.2vh 0 4.2vh}
+#story h2 em{color:var(--gold-lt);font-size:.8em}
+#story p.s{max-width:460px;color:rgba(247,243,235,.78);font-size:1.02rem;line-height:1.7}
+#story .words{margin-top:5.5vh;display:flex;gap:28px;flex-wrap:wrap;color:var(--gold)}
+#story .mask>span{transition-delay:.5s}
+#story .mask:nth-of-type(2)>span{transition-delay:.65s}
+#story .fade{opacity:0;transform:translateY(22px);transition:opacity 1.05s ease 1s,transform 1.05s var(--ease) 1s}
+#story.open .fade{opacity:1;transform:none}
+#story.open .mask>span{transform:none}
+#story button{position:absolute;top:28px;right:5.5vw;background:none;border:none;font-size:.66rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;cursor:pointer;font-family:var(--sans);color:var(--cream)}
+
+/* ===== ENQUIRY ===== */
+#enq{position:fixed;inset:0;z-index:97;display:flex;align-items:center;justify-content:center;padding:5vw;background:rgba(12,10,9,.78);opacity:0;visibility:hidden;transition:opacity .55s ease,visibility .55s}
+#enq.open{opacity:1;visibility:visible}
+#enq .box{position:relative;width:min(100%,480px);background:var(--cream);color:var(--ink);padding:40px 36px 34px;transform:translateY(28px);transition:transform .85s var(--ease);border-radius:2px}
+#enq.open .box{transform:none}
+#enq .lab{color:var(--gold)}
+#enq h3{font-size:clamp(2.1rem,6.5vw,3rem);margin:12px 0 14px}
+#enq p{color:#5a524c;font-size:.9rem;margin-bottom:14px}
+#enq .btn{display:block;width:100%;text-align:center;margin-top:10px;border-color:var(--ink);color:var(--ink)}
+#enq .btn:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+#enq .btn.pri{background:var(--cocoa);border-color:var(--cocoa);color:var(--cream)}
+#enq .btn.pri:hover{background:var(--ink);border-color:var(--ink)}
+#enq [hidden]{display:none}
+#enq #enqFb{margin:18px 0 0;padding-top:16px;border-top:1px solid #ddd;font-size:.8rem;line-height:1.55}
+#enq #enqFb a,#enq #enqFb button{color:var(--spice);text-decoration:underline;background:none;border:none;font:inherit;cursor:pointer;padding:0}
+#enq .x{position:absolute;top:18px;right:20px;background:none;border:none;font-size:.58rem;font-weight:500;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;color:var(--ink);font-family:var(--sans)}
+
+/* ===== FILM MODAL ===== */
+#modal{position:fixed;inset:0;background:rgba(12,10,9,.97);z-index:90;display:flex;align-items:center;justify-content:center;padding:5vw;
+  clip-path:circle(0% at 50% 50%);visibility:hidden;transition:clip-path .95s var(--ease),visibility .95s}
+#modal.open{clip-path:circle(150% at 50% 50%);visibility:visible}
+#modal video{max-width:100%;max-height:78vh;border-radius:2px}
+#modal button{position:absolute;top:28px;right:5.5vw;background:none;border:none;color:var(--cream);font-size:.66rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;cursor:pointer;font-family:var(--sans)}
+
+/* ===== NATIVE SCROLL TIMELINE ===== */
+@supports (animation-timeline:view()) and (animation-timeline:scroll()){
+  #bar{animation:grow linear both;animation-timeline:scroll(root)}
+  .corners{animation:snap linear both;animation-timeline:scroll(root);animation-range:0 55svh}
+  .hero{animation:heroOut linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+  .hero video{animation:vidOut linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+  .hero .content{animation:textOut linear both;animation-timeline:scroll(root);animation-range:0 88svh}
+  .hero .l1{animation:toL linear both;animation-timeline:scroll(root);animation-range:0 65svh}
+  .hero .l2{animation:toR linear both;animation-timeline:scroll(root);animation-range:0 65svh}
+  .hero .shade{animation:shadeIn linear both;animation-timeline:scroll(root);animation-range:0 100svh}
+}
+@keyframes grow{to{transform:scaleX(1)}}
+@keyframes snap{from{transform:scale(.94)}to{transform:none}}
+@keyframes heroOut{to{transform:scale(.935)}}
+@keyframes vidOut{to{transform:translate3d(0,20vh,0) scale(1.06)}}
+@keyframes textOut{to{transform:translate3d(0,-20vh,0);opacity:0}}
+@keyframes toL{to{transform:translate3d(-7vw,0,0)}}
+@keyframes toR{to{transform:translate3d(7vw,0,0)}}
+@keyframes shadeIn{to{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.clouds i,.scrollcue i,.smoke i,.art{animation:none}.smoke.puff,.cube.dip{animation:none}.cube{transition:none}}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+<div id="vh" style="position:fixed;left:0;top:0;width:0;height:100vh;height:100svh;visibility:hidden;pointer-events:none"></div>
+<div class="corners"><i></i><i></i><i></i><i></i></div>
+<div id="intro"><span>Amara Katha</span></div>
+
+<nav id="nav">
+  <a class="logo" href="#top">Amara Katha</a>
+  <ul>
+    <li><a href="#story" id="openStory">Our Story</a></li>
+    <li><a href="#chocolates">Chocolates</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <video autoplay muted loop playsinline preload="auto" src="videos/brand-film.mp4"></video>
+  <div class="clouds"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="content">
+    <span class="lab kick reveal">India in every bite</span>
+    <h1><span class="ln l1"><span>Amara</span></span><span class="ln l2"><span>Katha <em>Rasa</em></span></span></h1>
+    <div class="meta">
+      <p class="reveal">Chocolate made to be gifted, shared and remembered.</p>
+      <button class="btn reveal" id="watch" style="--d:.2s">Watch the film</button>
+    </div>
+  </div>
+  <div class="scrollcue">Scroll<i></i></div>
+  <div class="shade"></div>
+</header>
+
+<section class="choc" id="chocolates">
+  <div class="hs" id="hs">
+    <div class="pin" id="pin">
+
+      <div class="scenes" aria-hidden="true"><div class="scene s0"></div><div class="scene s1"></div><div class="scene s2"></div><div class="scene s3"></div></div>
+
+      <div class="heads">
+        <h3 class="name dark l" style="--len:7">Itihaas</h3>
+        <h3 class="name dark r" style="--len:11">Masala Mood</h3>
+        <h3 class="name dark l" style="--len:6">Vanvas</h3>
+        <h3 class="name dark r" style="--len:6">Kahani</h3>
+      </div>
+
+      <div class="stage"><div class="tilt"><div class="cube" id="cube">
+          <div class="face" style="--r:0"><video muted loop playsinline preload="auto" data-hover src="videos/itihaas.mp4"></video></div>
+          <div class="face" style="--r:1"><video muted loop playsinline preload="auto" data-hover src="videos/masala-mood.mp4"></video></div>
+          <div class="face" style="--r:2"><video muted loop playsinline preload="auto" data-hover src="videos/vanvas.mp4"></video></div>
+          <div class="face" style="--r:3"><video muted loop playsinline preload="auto" data-hover src="videos/kahani.mp4"></video></div>
+        </div></div><div class="floor"></div></div>
+
+      <div class="tails">
+        <div class="info dark">
+          <span class="lab cnt">01  /  04</span>
+          <p class="tag">Rooted in <em>history</em></p>
+          <p class="desc">Itihaas means history. A deep, slow-melting chocolate inspired by old traditions and royal kitchens, rich and grounded with a long, warm finish.</p>
+          <div class="tags"><span>Deep &amp; rich</span><span>Heritage</span><span>Gifting</span></div>
+          <a class="enq" data-enq="Itihaas" href="mailto:amarakatharasa@gmail.com?subject=Enquiry%20-%20Itihaas">Enquire →</a>
+        </div>
+        <div class="info dark">
+          <span class="lab cnt">02  /  04</span>
+          <p class="tag">A little <em>bold</em></p>
+          <p class="desc">The warmth of Indian spice in every bite. Playful, aromatic and a little bold, made for the moments when you want your chocolate to have personality.</p>
+          <div class="tags"><span>Spiced</span><span>Bold</span><span>Everyday joy</span></div>
+          <a class="enq" data-enq="Masala Mood" href="mailto:amarakatharasa@gmail.com?subject=Enquiry%20-%20Masala%20Mood">Enquire →</a>
+        </div>
+        <div class="info dark">
+          <span class="lab cnt">03  /  04</span>
+          <p class="tag">Into the <em>forest</em></p>
+          <p class="desc">Vanvas is a walk into the forest. Earthy, calm and natural, a chocolate for slowing down and tasting something quietly different.</p>
+          <div class="tags"><span>Earthy</span><span>Calm</span><span>Natural</span></div>
+          <a class="enq" data-enq="Vanvas" href="mailto:amarakatharasa@gmail.com?subject=Enquiry%20-%20Vanvas">Enquire →</a>
+        </div>
+        <div class="info dark">
+          <span class="lab cnt">04  /  04</span>
+          <p class="tag">Every bite, a <em>story</em></p>
+          <p class="desc">Every kahani has a beginning, and this one begins with a smooth, creamy bite. Soft and comforting, perfect for sharing stories around the table.</p>
+          <div class="tags"><span>Smooth</span><span>Creamy</span><span>Sharing</span></div>
+          <a class="enq" data-enq="Kahani" href="mailto:amarakatharasa@gmail.com?subject=Enquiry%20-%20Kahani">Enquire →</a>
+        </div>
+      </div>
+
+      <div class="smoke" id="smoke" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+      <div class="ui">
+        <div class="arrows"><button id="prev" aria-label="Previous">←</button><button id="next" aria-label="Next">→</button></div>
+        <div class="index" id="index"><button>Itihaas</button><button>Masala Mood</button><button>Vanvas</button><button>Kahani</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <span class="lab reveal">Contact us</span>
+    <h2 class="big"><span class="mask"><span>Say <em>hello</em></span></span></h2>
+    <div class="cols">
+      <div class="reveal"><span class="lab">Write to us</span><a class="mail" data-enq="" href="mailto:amarakatharasa@gmail.com">amarakatharasa@gmail.com</a></div>
+      <div class="reveal" style="--d:.1s"><span class="lab">Online</span><p>www.amarakatharasa.world</p></div>
+      <div class="reveal" style="--d:.2s"><span class="lab">Gifting</span><p>Weddings, festivals, corporate gifts and gifts abroad.</p></div>
+    </div>
+    <div class="actions reveal">
+      <a class="btn" data-enq="" href="mailto:amarakatharasa@gmail.com?subject=Enquiry">Send an enquiry</a>
+      <a class="up" href="#top">Back to top ↑</a>
+    </div>
+  </div>
+  <div class="end">
+  <div class="word big" aria-hidden="true">Amara Katha <em>Rasa</em></div>
+  <footer><span>© <span id="yr">2026</span> Amara Katha Rasa. All rights reserved.</span><span>India in every bite</span></footer>
+  </div>
+</section>
+
+<div id="story">
+  <button id="closeStory">Close</button>
+  <div>
+    <span class="lab fade" style="transition-delay:.3s">Our Story</span>
+    <h2 class="big"><span class="mask"><span>Born from the</span></span><span class="mask"><span>flavours <em>of home.</em></span></span></h2>
+    <p class="s fade">Every chocolate carries a story worth telling. We make ours to be gifted, shared and remembered.</p>
+    <div class="words lab fade"><span>Rooted</span><span>·</span><span>Crafted</span><span>·</span><span>Shared</span></div>
+  </div>
+</div>
+
+<div id="enq" role="dialog" aria-modal="true" aria-labelledby="enqT">
+  <div class="box">
+    <button class="x" id="enqX">Close</button>
+    <span class="lab">Enquiry</span>
+    <h3 class="big" id="enqT">Write to us</h3>
+    <p>Write to us by email, or message us on Instagram.</p>
+    <a class="btn pri" id="enqMl">Open in mail</a>
+    <a class="btn" id="enqIg" target="_blank" rel="noopener">Instagram</a>
+    <p id="enqFb" hidden>No mail app opened on this device? Write to us at <b>amarakatharasa@gmail.com</b> — <a id="enqGm" target="_blank" rel="noopener">open Gmail</a> or <button type="button" id="enqCp">copy the address</button>.</p>
+  </div>
+</div>
+
+<div id="modal"><button id="close">Close</button>
+  <video controls playsinline preload="auto" src="videos/brand-film.mp4"></video>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const NATIVE=CSS.supports('animation-timeline','view()')&&CSS.supports('animation-timeline','scroll()');
+
+setTimeout(()=>{$('#intro').classList.add('gone');$('#top').classList.add('in');$$('#top .reveal').forEach(e=>e.classList.add('show'))},2100);
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.12});
+$$('#contact .reveal,#contact .mask').forEach(el=>io.observe(el));
+
+const story=$('#story');
+function openStory(){story.classList.add('open');document.documentElement.classList.add('lock')}
+function closeStory(){story.classList.remove('open');document.documentElement.classList.remove('lock')}
+$('#openStory').addEventListener('click',e=>{e.preventDefault();openStory()});
+$('#closeStory').onclick=closeStory;
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeStory();$('#close').click();closeEnq()}});
+
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+const MAIL='amarakatharasa@gmail.com';
+const INSTAGRAM='https://www.instagram.com/';
+const enq=$('#enq');
+function openEnq(sub){
+  const subject=sub?'Enquiry - '+sub:'Enquiry',body='Hello Amara Katha Rasa,\n\n';
+  $('#enqT').textContent=sub||'Write to us';
+  $('#enqMl').href='mailto:'+MAIL+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  $('#enqIg').href=INSTAGRAM;
+  $('#enqGm').href='https://mail.google.com/mail/?view=cm&fs=1&to='+MAIL+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  $('#enqFb').hidden=true;$('#enqCp').textContent='copy the address';
+  enq.classList.add('open');document.documentElement.classList.add('lock');
+}
+function closeEnq(){enq.classList.remove('open');if(!story.classList.contains('open'))document.documentElement.classList.remove('lock')}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-enq]');if(a){e.preventDefault();openEnq(a.dataset.enq)}else if(e.target===enq)closeEnq()});
+$('#enqX').onclick=closeEnq;
+let fbTimer;
+$('#enqMl').addEventListener('click',()=>{
+  let left=false;const mark=()=>{left=true};
+  addEventListener('blur',mark,{once:true});document.addEventListener('visibilitychange',mark,{once:true});
+  clearTimeout(fbTimer);
+  fbTimer=setTimeout(()=>{removeEventListener('blur',mark);document.removeEventListener('visibilitychange',mark);if(!left)$('#enqFb').hidden=false},1600);
+});
+$('#enqCp').onclick=function(){
+  const done=()=>{this.textContent='copied ✓'};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(MAIL).then(done,()=>prompt('Copy this email address:',MAIL));
+  else{const t=document.createElement('textarea');t.value=MAIL;document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(_){prompt('Copy this email address:',MAIL)}t.remove()}
+};
+
+/* letter split */
+$$('.name').forEach(n=>{const t=n.textContent;n.setAttribute('aria-label',t);n.textContent='';
+  [...t].forEach((c,i)=>{const sp=document.createElement('span');sp.className='ch';sp.setAttribute('aria-hidden','true');sp.style.setProperty('--n',i);sp.innerHTML=c===' '?'&nbsp;':c;n.appendChild(sp)})});
+
+/* line-art for each scene (drawn here so the file stays small) */
+(function(){
+  const E=(x,y,rx,ry,a)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" transform="rotate(${a||0} ${x} ${y})"/>`;
+  const arch=(cx,top,w,h)=>{const l=cx-w/2,r=cx+w/2,b=top+h,m=top+w*.62;return `<path d="M${l} ${b}V${m}C${l} ${top+w*.25} ${cx-w*.08} ${top+w*.12} ${cx} ${top}C${cx+w*.08} ${top+w*.12} ${r} ${top+w*.25} ${r} ${m}V${b}"/>`};
+  const anise=(x,y,r)=>{let s='';for(let i=0;i<8;i++)s+=`<ellipse cx="0" cy="${-r*.52}" rx="${r*.19}" ry="${r*.46}" transform="rotate(${i*45})"/>`;return `<g transform="translate(${x} ${y})">${s}<circle r="${r*.17}"/><circle r="${r*.06}"/></g>`};
+  const pod=(x,y,L,a)=>{const w=L*.28;return `<g transform="translate(${x} ${y}) rotate(${a})"><ellipse rx="${L/2}" ry="${w}"/><path d="M${-L/2} 0Q0 ${-w*.5} ${L/2} 0M${-L/2} 0Q0 ${w*.5} ${L/2} 0M${-L*.2} ${-w*.8}Q0 ${-w*.45} ${L*.2} ${-w*.8}"/></g>`};
+  const cinnamon=(x,y,r)=>{let d='M0 0';for(let i=1;i<=64;i++){const a=i*.33,q=r*i/64;d+=`L${(Math.cos(a)*q).toFixed(1)} ${(Math.sin(a)*q).toFixed(1)}`}return `<g transform="translate(${x} ${y})"><path d="${d}"/></g>`};
+  const chilli=(x,y,L,a)=>`<g transform="translate(${x} ${y}) rotate(${a})"><path d="M0 0C${L*.3} ${-L*.18} ${L*.75} ${-L*.1} ${L} ${L*.12}C${L*.7} ${L*.1} ${L*.3} ${L*.16} 0 0Z"/><path d="M0 0C${-L*.05} ${-L*.12} ${L*.04} ${-L*.2} ${L*.1} ${-L*.2}"/></g>`;
+  const fern=(x,y,L,a,c)=>{let s=`<g transform="translate(${x} ${y}) rotate(${a})"><path d="M0 0Q${L*c} ${-L*.5} ${L*c*.4} ${-L}"/>`;
+    for(let i=1;i<=13;i++){const t=i/14,px=2*(1-t)*t*L*c+t*t*L*c*.4,py=-(2*(1-t)*t*L*.5+t*t*L),n=L*.2*(1-t*.75)+8,th=36,k=Math.PI*th/180;
+      [[-1,th],[1,-th]].forEach(([d,rot])=>{const cx=px+d*(n/2)*Math.cos(k),cy=py-(n/2)*Math.sin(k);s+=`<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${(n/2).toFixed(1)}" ry="${(n*.13).toFixed(1)}" transform="rotate(${rot} ${cx.toFixed(1)} ${cy.toFixed(1)})"/>`})}
+    return s+'</g>'};
+  const sparkle=(x,y,r)=>`<path d="M${x} ${y-r}Q${x} ${y} ${x+r} ${y}Q${x} ${y} ${x} ${y+r}Q${x} ${y} ${x-r} ${y}Q${x} ${y} ${x} ${y-r}Z"/>`;
+  const book=(x,y,W)=>{const h=W*.55;let s=`<g transform="translate(${x} ${y})"><path d="M0 0Q${-W*.25} ${-h*.12} ${-W*.5} 0V${h}Q${-W*.25} ${h*.88} 0 ${h*.98}Z"/><path d="M0 0Q${W*.25} ${-h*.12} ${W*.5} 0V${h}Q${W*.25} ${h*.88} 0 ${h*.98}Z"/>`;
+    [.2,.4,.6,.8].forEach(f=>{s+=`<path d="M${-W*.06} ${h*f}Q${-W*.25} ${h*f-6} ${-W*.45} ${h*f}M${W*.06} ${h*f}Q${W*.25} ${h*f-6} ${W*.45} ${h*f}"/>`});return s+'</g>'};
+  const stars=(pts)=>`<path d="M${pts.map(p=>p.join(' ')).join('L')}"/>`+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4"/>`).join('');
+  const art=[
+    /* Itihaas · history: palace arches */
+    arch(250,140,300,780)+arch(250,168,244,752)+arch(250,196,188,724)+arch(1350,140,300,780)+arch(1350,168,244,752)+arch(1350,196,188,724),
+    /* Masala Mood · spice: star anise, cardamom, cinnamon, chilli */
+    anise(240,250,130)+anise(1390,660,170)+anise(1290,190,70)+anise(330,720,60)+pod(1180,430,150,-35)+pod(430,520,120,25)+pod(1450,390,100,70)+pod(170,540,90,-60)+cinnamon(1480,210,80)+cinnamon(780,820,60)+chilli(120,110,200,25)+chilli(1250,810,220,-160),
+    /* Vanvas · forest: ferns */
+    fern(150,900,520,-6,.2)+fern(390,900,360,10,-.18)+fern(1450,900,540,6,-.2)+fern(1210,900,380,-12,.18)+fern(1000,0,260,184,.2)+fern(300,0,220,176,-.2),
+    /* Kahani · story: an open book and a constellation */
+    book(1260,600,430)+stars([[160,170],[300,270],[250,430],[430,370],[540,200],[430,120]])+stars([[1150,150],[1290,100],[1400,210],[1500,130]])+sparkle(720,110,18)+sparkle(930,790,14)+sparkle(260,740,16)+sparkle(1450,330,22)+sparkle(620,820,12)
+  ];
+  document.querySelectorAll('.scene').forEach((el,i)=>{el.insertAdjacentHTML('beforeend','<div class="art"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">'+art[i]+'</svg></div>')});
+})();
+
+/* Chocolates: scrolling only chooses the chocolate. The cube, colour, name and words then all change together, at one steady speed. */
+const hs=$('#hs'),pin=$('#pin'),cube=$('#cube'),smoke=$('#smoke'),idx=[...$$('#index button')];
+const names=[...$$('.name')],infos=[...$$('.info')],scenes=[...$$('.scene')],vids=[...$$('.face video')];
+const N=names.length;
+let H=innerHeight,step=0,hold=0,extra=0,dist=0,hsTop=0,playing='',curK=-2,st={};
+
+function measure(){
+  H=$('#vh').offsetHeight||innerHeight;
+  step=H*1.6;           // scrolling given to each chocolate (longer = calmer, more controlled)
+  hold=H*.8;            // a pause on the last chocolate before Contact rises
+  extra=H*1.1;          // extra scrolling so Contact rises slowly instead of at full speed
+  dist=(N-1)*step;
+  hs.style.height=(H*2+dist+hold+extra)+'px';
+  hsTop=hs.getBoundingClientRect().top+scrollY;
+}
+/* One steady, eased glide for every jump (arrows, index, menu links, snap).
+   Fixed feel regardless of distance, and it stops the instant the user touches the wheel / screen / keys. */
+let glideId=0,touching=false,lastInput=0;
+function glide(to,ms){
+  const from=scrollY,max=document.documentElement.scrollHeight-innerHeight;
+  to=clamp(to,0,max);
+  const d=to-from;
+  if(Math.abs(d)<2)return;
+  const dur=ms||clamp(Math.abs(d)*0.55,450,1300);
+  const id=++glideId,t0=performance.now();
+  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  (function tick(now){
+    if(id!==glideId)return;
+    const t=clamp((now-t0)/dur);
+    scrollTo(0,from+d*ease(t));
+    if(t<1)requestAnimationFrame(tick);
+  })(t0);
+}
+const stopGlide=()=>{glideId++;lastInput=performance.now()};
+addEventListener('wheel',stopGlide,{passive:true});
+addEventListener('touchstart',()=>{touching=true;stopGlide()},{passive:true});
+addEventListener('touchend',()=>{touching=false;lastInput=performance.now()},{passive:true});
+addEventListener('touchcancel',()=>{touching=false},{passive:true});
+addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(e.key))stopGlide()});
+function goTo(i){glide(hsTop+clamp(i,0,N-1)*step+2)}
+// menu / anchor links use the same glide instead of the browser's jumpy one
+$$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const h=a.getAttribute('href');
+  if(h==='#story')return;
+  e.preventDefault();
+  const max=document.documentElement.scrollHeight-innerHeight;
+  if(h==='#top')glide(0,1100);
+  else if(h==='#chocolates')glide(hsTop+2,1100);
+  else if(h==='#contact')glide(max,1300);
+}));
+$('#prev').onclick=()=>goTo(Math.max(curK,0)-1);
+$('#next').onclick=()=>goTo(Math.max(curK,0)+1);
+idx.forEach((b,i)=>b.onclick=()=>goTo(i));
+
+vids.forEach(v=>{
+  v.addEventListener('loadeddata',()=>{if(v.paused&&v.currentTime===0)v.currentTime=.04});
+  v.addEventListener('canplay',()=>{if(v.dataset.shouldPlay==='1'&&v.paused)v.play().catch(()=>{})});
+});
+addEventListener('load',()=>setTimeout(()=>vids.forEach(v=>{v.preload='auto'}),300));
+function play(list){
+  const key=list.join();
+  if(key===playing)return;
+  playing=key;
+  vids.forEach((v,i)=>{
+    if(list.includes(i)){v.dataset.shouldPlay='1';v.play().catch(()=>{})}
+    else{v.dataset.shouldPlay='0';v.pause()}
+  });
+}
+
+function setChapter(act,first){
+  const k=Math.max(act,0);
+  cube.style.setProperty('--k',k);
+  scenes.forEach((sc,i)=>sc.classList.toggle('on',i===k));
+  [names,infos].forEach(list=>list.forEach((n,i)=>{n.classList.toggle('on',i===act);n.classList.toggle('past',act>=0&&i<act)}));
+  if(act>=0)idx.forEach((b,i)=>b.classList.toggle('on',i===act));
+  if(act>=0&&!first){
+    smoke.classList.remove('puff');cube.classList.remove('dip');void smoke.offsetWidth;
+    smoke.classList.add('puff');cube.classList.add('dip');
+  }
+}
+
+const contact=$('#contact'),bar=$('#bar'),hero=$('#top'),hv=hero.querySelector('video');
+let pending=false,idleT;
+
+function update(){
+  pending=false;
+  const y=scrollY,local=y-hsTop,fr=local/step;
+
+  // which chocolate: it only changes once you are clearly past the halfway point, so it never flickers
+  let act=-1;
+  if(local>-H*.65){act=(curK>=0&&Math.abs(fr-curK)<.62)?curK:clamp(Math.round(fr),0,N-1)}
+  if(act!==curK){const first=curK<0;curK=act;setChapter(act,first)}
+
+  // videos: the one on show plays, and the neighbour warms up as you approach it
+  const want=[];
+  if(local>-H*1.15&&local<dist+hold+H*.55){
+    const a=act<0?0:act;
+    want.push(a);
+    if(act<0)want.push(0);
+    if(a<N-1&&fr>=a+.3)want.push(a+1);
+    if(a>0&&fr<=a-.3)want.push(a-1);
+  }
+  play([...new Set(want)]);
+
+  // Contact rises slowly: it travels over (H+extra) of scrolling instead of H
+  const L=H+extra,p=(local-dist-hold)/L;
+  if(p>0&&p<1)contact.style.transform='translate3d(0,'+(-(1-p)*extra).toFixed(1)+'px,0)';
+  else if(st.ct!==0){contact.style.transform=''}
+  st.ct=(p>0&&p<1)?1:0;
+  if(!NATIVE)bar.style.transform='scaleX('+(y/(document.documentElement.scrollHeight-H)).toFixed(4)+')';
+  const covered=y>H*1.05;
+  if(st.cov!==covered){st.cov=covered;hero.classList.toggle('off',covered);covered?hv.pause():hv.play().catch(()=>{})}
+}
+// when scrolling stops between two chocolates, glide gently to the nearest one
+function settle(){
+  if(touching||performance.now()-lastInput<250)return;      // never fight the user's fingers or wheel
+  const local=scrollY-hsTop;
+  if(curK<0||local<10||local>dist+6)return;
+  const target=hsTop+curK*step;
+  if(Math.abs(scrollY-target)>14)glide(target,650);
+}
+function queue(){if(!pending){pending=true;requestAnimationFrame(update)}clearTimeout(idleT);idleT=setTimeout(settle,420)}
+addEventListener('scroll',queue,{passive:true});
+addEventListener('resize',()=>{measure();queue()});
+addEventListener('load',()=>{measure();queue()});
+measure();update();
+
+$$('.btn').forEach(b=>{
+  b.addEventListener('mousemove',e=>{
+    const r=b.getBoundingClientRect();
+    b.style.transform=`translate(${((e.clientX-r.left-r.width/2)*.16)}px,${((e.clientY-r.top-r.height/2)*.28)}px)`;
+  });
+  b.addEventListener('mouseleave',()=>b.style.transform='');
+});
+
+const modal=$('#modal'),mv=modal.querySelector('video');
+$('#watch').onclick=()=>{modal.classList.add('open');mv.currentTime=0;mv.play().catch(()=>{})};
+$('#close').onclick=()=>{modal.classList.remove('open');mv.pause()};
+</script>
+</body>
+</html>
